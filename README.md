@@ -59,7 +59,7 @@ The system operates on a "hot path" data flow:
 ### Stream Analytics Job (ASA)
 The ASA job performs the aggregation and business logic.
 
-### ASA Query (`query.sql`)
+### ASA Query (query.sql)
 ```sql
 SELECT
     System.Timestamp() AS WindowEndTime,
