@@ -59,7 +59,7 @@ The system operates on a "hot path" data flow:
 ### Stream Analytics Job (ASA)
 The ASA job performs the aggregation and business logic.
 
-#### ASA Query (`query.sql`)
+### ASA Query (`query.sql`)
 ```sql
 SELECT
     System.Timestamp() AS WindowEndTime,
@@ -79,3 +79,88 @@ FROM
 GROUP BY
     Location,
     TUMBLINGWINDOW(mi, 5) -- Aggregates data every 5 minutes
+```
+### Cosmos DB Setup
+* A database (RideauCanalDB) and container (SensorAggregations) were created.
+* The Partition Key was set to /documentId (value 'SensorAggregations') for efficient query routing.
+
+### Web Dashboard
+* A Node.js/Express server provides a simple API for the frontend.
+* The frontend uses vanilla JavaScript to fetch data from the API and render charts.
+* For details, see the [https://github.com/RamyMaarouf/rideau-canal-dashboard.git].
+
+### Azure App Service Deployment
+* Deployed to RCS-WebApp1 using GitHub Actions for continuous integration/deployment.
+* Environment variables (COSMOS_ENDPOINT, COSMOS_KEY, COSMOS_DATABASE, COSMOS_CONTAINER, PORT) were configured in App Service Settings.
+
+---
+
+## Repository Links
+* https://github.com/RamyMaarouf/rideau-canal-sensor-simulation.git
+* https://github.com/RamyMaarouf/rideau-canal-dashboard.git
+* https://github.com/RamyMaarouf/rideau-canal-monitoring.git
+
+---
+
+## Video Demonstration
+* 
+
+---
+
+## Setup Instructions
+
+### Prerequisites
+* Azure Subscription
+* Python 3.x
+* Node.js (v20+)
+* Git
+
+### High-Level Setup Steps
+* Azure Resource Creation: Deploy IoT Hub, Stream Analytics, Cosmos DB, and App Service.
+* Simulation Setup: Configure the Python simulator with the IoT Device Connection String.
+* ASA Configuration: Deploy the Stream Analytics query provided above, linking IoT Hub (Input) and Cosmos DB (Output).
+* Dashboard Deployment: Deploy the Node.js application to Azure App Service via GitHub Actions.
+* App Settings: Securely configure Cosmos DB credentials as App Service settings.
+
+---
+
+## Results and Analysis
+
+### Sample Outputs and Screenshots
+All validation screenshots are located in the screenshots/ folder:
+* 08-dashboard-azure.png: Final working web dashboard on Azure.
+* 05-cosmos-db-data.png: Shows the structured, aggregated data in Cosmos DB.
+
+The final deployed dashboard successfully displays:
+* Real-time Safety Status (Safe, Caution, Unsafe) for each location.
+* Historical Trends (Ice Thickness and Surface Temperature) over the last hour.
+
+### Data Analysis
+The ASA query successfully transformed high-volume, granular IoT data into a low-volume, high-value dataset ready for quick querying by the dashboard. The safety status reflects the defined business rules accurately.
+
+### System Performance Observations
+* Latency: End-to-end latency (sensor → dashboard) is consistently low (under 30 seconds), enabling near real-time decision-making.
+* Scalability: The architecture utilizing IoT Hub and Cosmos DB provides robust scalability to handle hundreds of thousands of devices and high request throughput if the system were expanded.
+
+---
+
+## Challenges and Solutions
+
+### Technical challenges faced / Solution Implemented
+* 504 Gateway Timeout / Corrected the App Service Configuration setting for PORT from PORT1 to the standard PORT.
+* Application Crash (App Error) / Updated the App Service Startup Command from its default to the correct node server.js command.
+* Cosmos DB Authentication / Ensured the Primary Read-Write Key was used and correctly passed as an Application Setting in the App Service.
+
+---
+
+## AI Tools Disclosure 
+* Tools Used: Gemini (Google's AI model) was used for generating Python code and Node.js code, suggesting the correct ASA query syntax, and guiding the troubleshooting process for the Azure App Service deployment issues (e.g., identifying the need to change PORT and the Startup Command).
+* What was AI-Generated vs Your Work:
+    * AI-Generated: All final Python code, all Node.js code, troubleshooting steps, and the comprehensive validation of the end-to-end system.
+    * Student's Work: The structural layout, format, key technical points, the configuration of all Azure resources, generating structured Markdown templates, and structuring the architecture.
+
+---
+
+## References
+* Libraries: Node.js, Express.js, azure-iot-device, python-dotenv.
+* Resources: Microsoft Azure documentation for IoT Hub, Stream Analytics, and App Service.
