@@ -103,7 +103,7 @@ GROUP BY
 ---
 
 ## Video Demonstration
-* 
+* [https://youtu.be/d8LitDA-Hw8]
 
 ---
 
