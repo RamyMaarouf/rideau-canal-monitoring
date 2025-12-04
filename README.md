@@ -7,7 +7,7 @@ The **Rideau Canal Ice Monitoring System** is an end-to-end IoT solution designe
 
 ## Student Information
 * **Name:** Ramy Maarouf
-* **Student ID:** 041-269-337
+* **Student ID:** 041269337
 
 ---
 
